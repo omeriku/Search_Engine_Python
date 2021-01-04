@@ -18,9 +18,9 @@ class Parse:
         :return:
         """
         text_tokens = word_tokenize(text)
-        print(text_tokens)
+        # print(text_tokens)
         tokenized_text_with_rules = self.parser_rules(text_tokens, stemming)
-        print(tokenized_text_with_rules)
+        # print(tokenized_text_with_rules)
         # text_tokens_without_stopwords = [w.lower() for w in text_tokens if w not in self.stop_words]
         return tokenized_text_with_rules
 
