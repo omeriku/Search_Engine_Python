@@ -1,6 +1,9 @@
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from document import Document
+import re
+
+from stemmer import Stemmer
 
 
 class Parse:
@@ -15,7 +18,9 @@ class Parse:
         :return:
         """
         text_tokens = word_tokenize(text)
+        print(text_tokens)
         tokenized_text_with_rules = self.parser_rules(text_tokens, stemming)
+        print(tokenized_text_with_rules)
         # text_tokens_without_stopwords = [w.lower() for w in text_tokens if w not in self.stop_words]
         return tokenized_text_with_rules
 
@@ -66,7 +71,9 @@ class Parse:
     def parser_rules(self, token_text, stemming=False):
         rmv = []
         add = []
-        url_stop = ["/", "\\", "-", "=", '%', "'", " ", ":", "`", '``', '_', '"', "...", '``', "''"]
+        url_stop = ["/", "\\", "-", "=", '%', "'", " ", ":", "`", '``', '_', '"', "...", '``', "''", "www."]
+        delimiters = '|'.join(map(re.escape, url_stop))
+        all_delimiters = '|'.join(map(re.escape, url_stop+["."]))
         nameOrEntity = ""
         counterOfCapitalInARow = 0
 
@@ -76,7 +83,7 @@ class Parse:
                 rmv.append(token)
                 continue
             # Check for unwanted chars like : . ; , / etc
-            if len(token) == 1 and token not in ["@", "#", "$"]:
+            if len(token) == 1 and token not in ["@", "#", "$", "%"]:
                 # if ord(token_text[i]) > 122 or 90 < ord(token_text[i]) < 97 or 57 < ord(token_text[i]) < 64 or 37 < ord(token_text[i]) < 48 or 31 < ord(token_text[i]) < 35:
                 rmv.append(token_text[i])
                 continue
@@ -86,16 +93,10 @@ class Parse:
                 continue
             # url detector
             if token.__contains__("//"):
-                word = ""
-                for c in token_text[i]:
-                    if c in url_stop or (c == "." and word.__contains__("www")):
-                        if word not in url_stop:
-                            add.append(word)
-                        word = ""
-                    else:
-                        word += c
+                token_url = [t for t in re.split(delimiters, token) if (len(t) > 1)]
+
                 rmv.append(token)
-                add.append(word)
+                add += token_url
                 continue
 
             # Check if it is a tag
@@ -230,26 +231,12 @@ class Parse:
                     continue
 
             # Split words that will mean something after splitting
-            if any(one_char in url_stop+["."] for one_char in token_text[i]):
+            if any(one_char in url_stop+["."] for one_char in token):
                 # print(token_text[i])
-                word = ""
-                for c in token_text[i]:
-                    if c in url_stop+["."]:
-                        if word not in add:
-                            add.append(word)
-                        word = ""
-                    elif c.isdigit():
-                        if word.isnumeric():
-                            word += c
-                        else:
-                            if word not in add:
-                                add.append(word)
-                            word = c
-                    else:
-                        word += c
-                if word not in add:
-                    add.append(word)
-                rmv.append(token_text[i])
+
+                token_url = [t for t in re.split(all_delimiters, token) if (len(t) > 1)]
+                rmv.append(token)
+                add += token_url
                 continue
 
 
