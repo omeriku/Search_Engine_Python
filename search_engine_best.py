@@ -7,6 +7,9 @@ from indexer import Indexer
 from searcher import Searcher
 import utils
 import statistics
+import search_engine_1
+import search_engine_2
+
 
 # DO NOT CHANGE THE CLASS NAME
 class SearchEngine:
@@ -93,9 +96,5 @@ class SearchEngine:
 
 
 def main():
-    path = "C:\\Users\\omern\\Desktop\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
-    config = ConfigClass()
-    config.corpusPath = path
-    search = SearchEngine()
-    search.build_index_from_parquet(path)
+    search_engine_1.run_engine()
 
