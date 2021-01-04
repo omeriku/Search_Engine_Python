@@ -7,6 +7,7 @@ import csv
 import pandas as pd
 import search_engine_best
 from configuration import ConfigClass
+from nltk.corpus import wordnet
 from searcher import Searcher
 
 def run_engine():
@@ -25,7 +26,7 @@ def run_engine():
         print(q)
         parsed_q = engine.get_parser().parse_sentence(q)
         k, docs = engine.search(q)
-        print(docs)
+        print(docs[:10])
 
 
 

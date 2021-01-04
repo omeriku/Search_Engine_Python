@@ -1,5 +1,7 @@
 from ranker import Ranker
+from nltk.corpus import wordnet
 import utils
+from indexer import Indexer
 
 
 # DO NOT MODIFY CLASS NAME
@@ -30,10 +32,17 @@ class Searcher:
             and the last is the least relevant result.
         """
         query_as_list = self._parser.parse_sentence(query)
+        q_wordnet = self.do_wordnet(query_as_list)
+
+        self.upper_lower_case(query_as_list, self._indexer)
+        self.upper_lower_case(q_wordnet, self._indexer)
+
+        print("query as list: ", query_as_list)
+        print("wordnet :", q_wordnet)
 
         relevant_docs = self._relevant_docs_from_posting(query_as_list)
         n_relevant = len(relevant_docs)
-        ranked_doc_ids = Ranker.rank_relevant_docs(relevant_docs)
+        ranked_doc_ids = Ranker.rank_relevant_docs(query_as_list, q_wordnet, relevant_docs, self._indexer, k) # @Todo add omer code
         return n_relevant, ranked_doc_ids
 
     # feel free to change the signature and/or implementation of this function 
@@ -61,3 +70,34 @@ class Searcher:
                 else:
                     relevant_docs[docId] += 1
         return relevant_docs
+
+    @staticmethod
+    def do_wordnet(query):
+        unique = set()
+        lowered = []
+        for word in query:
+            lowered.append(word.lower())
+
+        for word in lowered:
+            for dup in wordnet.synsets(word):
+                if dup.lemmas()[0].name().__contains__("_"):
+                    all = dup.lemmas()[0].name().split("_")
+                    for name in all:
+                        if name.lower() not in lowered:
+                            unique.add(name.lower())
+                else:
+                    name = dup.lemmas()[0].name().lower()
+                    if name.lower() not in lowered:
+                        unique.add(name)
+
+        return list(unique)
+
+    @staticmethod
+    def upper_lower_case(list_of_words, indexer):
+        for i, w in enumerate(list_of_words):
+            if w.lower() in indexer.inverted_idx:
+                list_of_words[i] = w.lower()
+            elif w.upper() in indexer.inverted_idx:
+                list_of_words[i] = w.upper()
+        # @Todo what with words that not in inverted
+
