@@ -94,6 +94,9 @@ class SearchEngine:
         searcher = Searcher(self._parser, self._indexer, model=self._model)
         return searcher.search(query)
 
+    def get_parser(self):
+        return self._parser
+
 
 def main():
     search_engine_1.run_engine()

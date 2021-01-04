@@ -19,10 +19,11 @@ def run_engine():
     engine = search_engine_best.SearchEngine()
     engine.build_index_from_parquet(path)
 
-    all_queries = query_reader(queries_path)
-    print(all_queries["information_need"])
+    all_queries = query_reader(queries_path)["information_need"]
 
-
+    for q in all_queries:
+        parsed_q = engine.get_parser().parse_sentence(q)
+        engine.search(parsed_q)
 
 
 
