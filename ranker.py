@@ -45,7 +45,7 @@ class Ranker:
             if sumMechane == 0:
                 cosSimilarity = 0
             else:
-                cosSimilarity = sumMechane / sumMechane
+                cosSimilarity = sumMone / sumMechane
             dict_Of_CosSimilarity[tweetId] = cosSimilarity
             listOfTuplesCos.append((tweetId,cosSimilarity))
 
