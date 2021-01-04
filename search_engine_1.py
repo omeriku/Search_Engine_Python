@@ -22,8 +22,10 @@ def run_engine():
     all_queries = query_reader(queries_path)["information_need"]
 
     for q in all_queries:
+        print(q)
         parsed_q = engine.get_parser().parse_sentence(q)
-        engine.search(parsed_q)
+        k, docs = engine.search(q)
+        print(docs)
 
 
 
