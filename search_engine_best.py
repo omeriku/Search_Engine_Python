@@ -38,6 +38,11 @@ class SearchEngine:
             number_of_documents += 1
             # index the document data
             self._indexer.add_new_doc(parsed_document)
+        print("len of inverted: ", len(self._indexer.inverted_idx))
+        print("len of posting: ", len(self._indexer.postingDict))
+        print("len of dataSet: ",len(self._indexer.benchDataSet))
+
+        print("Total Tweets :", number_of_documents)
         print('Finished parsing and indexing.')
 
     # DO NOT MODIFY THIS SIGNATURE
@@ -79,6 +84,8 @@ class SearchEngine:
 
 def main():
     path = "C:\\Projects\\Python\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
+    config = ConfigClass()
+    config.corpusPath = path
     search = SearchEngine()
     search.build_index_from_parquet(path)
 
