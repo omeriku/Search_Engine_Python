@@ -82,7 +82,7 @@ class Indexer:
                         self.postingDict[term] = []
 
                 # update posting dict
-                tf = document_dictionary[original_term] / numberOfUniqueWords
+                tf = document_dictionary[original_term] / doc_len
                 self.postingDict[term].append(
                     (document.tweet_id, document_dictionary[original_term], maxValueOfWordInDc, numberOfUniqueWords,
                      doc_len,tf))
@@ -147,3 +147,6 @@ class Indexer:
                     return True
                 return False
         return False
+
+    def getBenchDataSet(self):
+        return self.benchDataSet

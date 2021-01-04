@@ -44,6 +44,7 @@ class Searcher:
         :param query_as_list: parsed query tokens
         :return: dictionary of relevant documents mapping doc_id to document frequency.
         """
+
         relevant_docs = {}
         for term in query_as_list:
             posting_list = self._indexer.get_term_posting_list(term)
