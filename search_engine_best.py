@@ -45,7 +45,7 @@ class SearchEngine:
         print("len of dataSet: ", len(self._indexer.benchDataSet))
         end_time = datetime.now()
         print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
-
+        self._indexer.save_index("idx_bench")
         # cutter = statistics.mean(self._indexer.inverted_idx.values())
         # cutter = sorted(self._indexer.inverted_idx.values(), reverse=True)[int(len(self._indexer.inverted_idx) * 0.2)]
         # print("cut from value of: ", cutter)
@@ -93,7 +93,7 @@ class SearchEngine:
 
 
 def main():
-    path = "C:\\Projects\\Python\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
+    path = "C:\\Users\\omern\\Desktop\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
     config = ConfigClass()
     config.corpusPath = path
     search = SearchEngine()
