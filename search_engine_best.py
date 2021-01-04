@@ -1,11 +1,12 @@
 import pandas as pd
 from reader import ReadFile
+from datetime import datetime
 from configuration import ConfigClass
 from parser_module import Parse
 from indexer import Indexer
 from searcher import Searcher
 import utils
-
+import statistics
 
 # DO NOT CHANGE THE CLASS NAME
 class SearchEngine:
@@ -28,6 +29,7 @@ class SearchEngine:
         Output:
             No output, just modifies the internal _indexer object.
         """
+        total_time = datetime.now()
         df = pd.read_parquet(fn, engine="pyarrow")
         documents_list = df.values.tolist()
         # Iterate over every document in the file
@@ -40,9 +42,17 @@ class SearchEngine:
             self._indexer.add_new_doc(parsed_document)
         print("len of inverted: ", len(self._indexer.inverted_idx))
         print("len of posting: ", len(self._indexer.postingDict))
-        print("len of dataSet: ",len(self._indexer.benchDataSet))
+        print("len of dataSet: ", len(self._indexer.benchDataSet))
+        end_time = datetime.now()
+        print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
 
-        print("Total Tweets :", number_of_documents)
+        # cutter = statistics.mean(self._indexer.inverted_idx.values())
+        # cutter = sorted(self._indexer.inverted_idx.values(), reverse=True)[int(len(self._indexer.inverted_idx) * 0.2)]
+        # print("cut from value of: ", cutter)
+        # print("Total Tweets :", number_of_documents)
+        # sorted_dic = {key: value for key, value in sorted(self._indexer.inverted_idx.items(), key=lambda item: item[1], reverse=True) if key.__contains__(".com")}
+        # print("sorted =",len(sorted_dic))
+        # print(sorted_dic)
         print('Finished parsing and indexing.')
 
     # DO NOT MODIFY THIS SIGNATURE
