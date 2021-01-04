@@ -45,12 +45,6 @@ class Indexer:
                 capitalTerm = term.upper()
                 lowerTerm = term.lower()
 
-                # save in seperate dictionary because maybe will be indexed later to disk - For entities
-                #if term.__contains__(" ") and term not in self.parser.namesAndEntitiesMoreTimes:
-                #    self.onceButTwiceLaterPosting[capitalTerm] = (
-                #    document.tweet_id, document_dictionary[original_term], maxValueOfWordInDc, numberOfUniqueWords, doc_len)
-                #    continue
-
                 # Check the upper lower case
                 if self.first_alfa_upper(term):
                     term = capitalTerm
@@ -88,9 +82,10 @@ class Indexer:
                         self.postingDict[term] = []
 
                 # update posting dict
+                tf = document_dictionary[original_term] / numberOfUniqueWords
                 self.postingDict[term].append(
                     (document.tweet_id, document_dictionary[original_term], maxValueOfWordInDc, numberOfUniqueWords,
-                     doc_len))
+                     doc_len,tf))
 
                 # # Update inverted index and posting
                 # if term not in self.inverted_idx.keys():
@@ -111,8 +106,11 @@ class Indexer:
         Loads a pre-computed index (or indices) so we can answer queries.
         Input:
             fn - file name of pickled index.
+        Output:
+            inverted_index dictionary, posting dictionary
         """
-        raise NotImplementedError
+
+        return utils.load_obj(fn)
 
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.
@@ -122,7 +120,7 @@ class Indexer:
         Input:
               fn - file name of pickled index.
         """
-        raise NotImplementedError
+        utils.save_obj(self,fn)
 
     # feel free to change the signature and/or implementation of this function 
     # or drop altogether.
