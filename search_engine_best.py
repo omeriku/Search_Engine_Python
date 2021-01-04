@@ -75,3 +75,10 @@ class SearchEngine:
         """
         searcher = Searcher(self._parser, self._indexer, model=self._model)
         return searcher.search(query)
+
+
+def main():
+    path = "C:\\Projects\\Python\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
+    search = SearchEngine()
+    search.build_index_from_parquet(path)
+
