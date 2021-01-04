@@ -40,7 +40,7 @@ class Searcher:
         print("query as list: ", query_as_list)
         print("wordnet :", q_wordnet)
 
-        relevant_docs = self._relevant_docs_from_posting(query_as_list)
+        relevant_docs = self._relevant_docs_from_posting(query_as_list + q_wordnet)
         n_relevant = len(relevant_docs)
         ranked_doc_ids = Ranker.rank_relevant_docs(query_as_list, q_wordnet, relevant_docs, self._indexer, k) # @Todo add omer code
         return n_relevant, ranked_doc_ids
