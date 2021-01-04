@@ -1,4 +1,7 @@
 from parser_module import Parse
+import os
+import utils
+import string
 
 # DO NOT MODIFY CLASS NAME
 class Indexer:
@@ -43,10 +46,10 @@ class Indexer:
                 lowerTerm = term.lower()
 
                 # save in seperate dictionary because maybe will be indexed later to disk - For entities
-                if term.__contains__(" ") and term not in self.parser.namesAndEntitiesMoreTimes:
-                    self.onceButTwiceLaterPosting[capitalTerm] = (
-                    document.tweet_id, document_dictionary[original_term], maxValueOfWordInDc, numberOfUniqueWords, doc_len)
-                    continue
+                #if term.__contains__(" ") and term not in self.parser.namesAndEntitiesMoreTimes:
+                #    self.onceButTwiceLaterPosting[capitalTerm] = (
+                #    document.tweet_id, document_dictionary[original_term], maxValueOfWordInDc, numberOfUniqueWords, doc_len)
+                #    continue
 
                 # Check the upper lower case
                 if self.first_alfa_upper(term):
