@@ -46,9 +46,18 @@ class Searcher:
         """
 
         relevant_docs = {}
+        # Go over every term in the query
         for term in query_as_list:
             posting_list = self._indexer.get_term_posting_list(term)
-            for doc_id, tf in posting_list:
-                df = relevant_docs.get(doc_id, 0)
-                relevant_docs[doc_id] = df + 1
+
+            # Check if the term exists in the corpus
+            if posting_list is None:
+                continue
+            # Go over every doc that has the term
+            for doc in posting_list:
+                docId = doc[0]
+                if docId not in relevant_docs:
+                    relevant_docs[docId] = 1
+                else:
+                    relevant_docs[docId] += 1
         return relevant_docs
