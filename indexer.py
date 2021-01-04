@@ -3,7 +3,7 @@ class Indexer:
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.
     def __init__(self, config):
-        self.inverted_idx = {}
+        self.inverted_idx = {{}}
         self.postingDict = {}
         self.config = config
 
