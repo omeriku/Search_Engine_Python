@@ -11,7 +11,7 @@ class Parse:
     def __init__(self):
         self.stop_words = frozenset(stopwords.words('english'))
 
-    def parse_sentence(self, text, stemming = False):
+    def parse_sentence(self, text, stemming = True):
         """
         This function tokenize, remove stop words and apply lower case for every word within the text
         :param text:

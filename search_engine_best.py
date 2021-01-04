@@ -93,7 +93,8 @@ class SearchEngine:
 
 
 def main():
-    path = "C:\\Users\\omern\\Desktop\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
+    # path = "C:\\Users\\omern\\Desktop\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
+    path = "C:\\Projects\\Python\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
     config = ConfigClass()
     config.corpusPath = path
     search = SearchEngine()
