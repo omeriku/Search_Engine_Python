@@ -12,7 +12,7 @@ from searcher import Searcher
 
 def run_engine():
     # path = "C:\\Users\\omern\\Desktop\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
-    path = "C:\\Projects\\Python\\data_part_c\\data\\benchmark_data_train.snappy.parquet"
+    path = "data\\benchmark_data_train.snappy.parquet"
     queries_path = "data\\queries_train.tsv"
 
     config = ConfigClass()

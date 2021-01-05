@@ -116,7 +116,6 @@ class SearchEngine:
                 ranking.append(0)
         data_df = pd.DataFrame({'query': query_num, 'tweet':list_of_docs, 'y_true': ranking})
 
-
         df_rec = df[df['query'] == query_num]
         recall_total = len(df_rec[df_rec['y_true'] == 1.0])
 
@@ -127,7 +126,7 @@ class SearchEngine:
         # print("recall of ", query_num, "is :", metrics.recall_single(data_df, recall_total, query_num))
         # print("tagged docs", len(df_prec))
         map_of_query = metrics.map(data_df)
-        print("map is :", map_of_query)
+        print("map of", query_num, "is :", map_of_query)
         self.map_list.append(map_of_query)
 
 
