@@ -43,7 +43,7 @@ class Ranker:
 
                 # if the term in wordnet then decrease wij
                 if finalTermInDoc in wordnet:
-                    wij *= 0.65
+                    wij *= 0.75
                 # even if the term is not in the quey them add to mechane
                 term_wijSquare += math.pow(wij, 2)
 
