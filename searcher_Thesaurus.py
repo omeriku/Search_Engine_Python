@@ -77,19 +77,44 @@ class Searcher:
     def do_wordnet(query):
         related = set()
         lowered = []
+
         for word in query:
             lowered.append(word.lower())
 
+        # Go over every word in query
         for word in lowered:
+            toAdd = set()
             dictionary = thes.synonyms(word)[1][1]
+            listOfScores = thes.scored_synonyms(word)[1][1]
+            dictOfScored = dict(listOfScores)
+            #print(dictOfScored)
+            #print(dictionary)
+
+            # Go over the thesaurus words
             for idx, syn in enumerate(dictionary):
                 related.add(syn)
-            print()
-            print("word: ",word," similar: ",related)
-            print()
-            for term in related:
-                related.append(term.lower())
-            lr = list(related)
+            listRelated = list(related)
+            #dictOfScored = {key: value for key, value in dictOfScored if value > 0.2}
+
+            for key in dictOfScored:
+                if dictOfScored[key] > 0.2 and key not in query:
+                    toAdd.add(key)
+
+            if len(toAdd) > 0:
+                print("word: ",word," list: ",list(toAdd))
+
+
+
+
+
+
+
+            #print()
+            #print("dict- word: ",word," similar: ",listRelated)
+            #print("scored- word: ",word," similar: ",listOfScores)
+            #print()
+            for term in listRelated:
+                term = term.lower()
 
 
 
