@@ -40,6 +40,9 @@ class Ranker:
                 tf = Ranker.findTF(tweetId, listOfTerm)
                 idf = math.log(numOfDocsInCorpus / indexer.inverted_idx[finalTermInDoc], 2)
                 wij = tf * idf
+    # if the term in wordnet then decrease wij
+
+                # even if the term is not in the quey them add to mechane
 
                 term_wijSquare += math.pow(wij, 2)
                 # if the term in wordnet then decrease wij
