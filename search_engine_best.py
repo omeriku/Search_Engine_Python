@@ -5,6 +5,7 @@ from configuration import ConfigClass
 from parser_module import Parse
 from indexer import Indexer
 from searcher import Searcher
+import metrics
 import utils
 import statistics
 import search_engine_1
@@ -96,6 +97,45 @@ class SearchEngine:
 
     def get_parser(self):
         return self._parser
+
+    def check_engine_quality(self, query_num, list_of_docs):
+
+        benchmark_path = "data\\benchmark_lbls_train.csv"
+        df = pd.read_csv(benchmark_path)
+
+        df_prec = df[df['query'] == query_num]
+        df_prec = df_prec[df_prec['tweet'].isin(list_of_docs)]
+        dict_for_data = df_prec.set_index('tweet')['y_true'].to_dict()
+
+        ranking = []
+        for doc in list_of_docs:
+            try:
+                ranking.append(dict_for_data[int(doc)])
+            except:
+                ranking.append(0)
+        data_df = pd.DataFrame({'query': query_num, 'tweet':list_of_docs, 'y_true': ranking})
+        # data_df['query'] = query_num
+        # data_df['y_true'] = None
+        #
+        # for index, row in data_df.iterrows():
+        #     id = int(row['tweet'])
+        #     if id in dict_for_data.keys():
+        #         row['y_true'] = dict_for_data[id]
+        #     else:
+        #         row['y_true'] = 0
+        #
+        print(data_df)
+
+
+        df_rec = df[df['query'] == query_num]
+        recall_total = len(df_rec[df_rec['y_true'] == 1.0])
+
+        print("recall total :", recall_total)
+
+        print("precision of ", query_num, "is :", metrics.precision(data_df, True, query_number=query_num))
+        print("recall of ", query_num, "is :", metrics.recall_single(data_df, recall_total, query_num))
+        print("map is :", metrics.map(data_df))
+        print("tagged docs", len(df_prec))
 
 
 def main():

@@ -37,8 +37,8 @@ class Searcher:
         self.upper_lower_case(query_as_list, self._indexer)
         self.upper_lower_case(q_wordnet, self._indexer)
 
-        print("query as list: ", query_as_list)
-        print("wordnet :", q_wordnet)
+        # print("query as list: ", query_as_list)
+        # print("wordnet :", q_wordnet)
 
         relevant_docs = self._relevant_docs_from_posting(query_as_list + q_wordnet)
         n_relevant = len(relevant_docs)

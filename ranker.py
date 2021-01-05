@@ -68,12 +68,12 @@ class Ranker:
 
 
         ranked_results = sorted(listOfTuplesCos,key=lambda item:item[1],reverse=True)
-        print()
-        print(ranked_results[:8])
-        print("text1: ",indexer.benchDataSet[ranked_results[0][0]])
-        print("text2: ", indexer.benchDataSet[ranked_results[1][0]])
-        print("text3: ", indexer.benchDataSet[ranked_results[2][0]])
-        print()
+        # print()
+        # print(ranked_results[:8])
+        # print("text1: ",indexer.benchDataSet[ranked_results[0][0]])
+        # print("text2: ", indexer.benchDataSet[ranked_results[1][0]])
+        # print("text3: ", indexer.benchDataSet[ranked_results[2][0]])
+        # print()
 
         #ranked_results = sorted(relevant_docs.items(), key=lambda item: item[1], reverse=True)
         if k is not None:
