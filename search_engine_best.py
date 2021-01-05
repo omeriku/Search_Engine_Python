@@ -7,9 +7,7 @@ from indexer import Indexer
 from searcher import Searcher
 import metrics
 import utils
-import statistics
 import search_engine_1
-import search_engine_2
 
 
 # DO NOT CHANGE THE CLASS NAME
@@ -34,6 +32,7 @@ class SearchEngine:
         Output:
             No output, just modifies the internal _indexer object.
         """
+        print("\nNow Starting search engine BEST")
         total_time = datetime.now()
         df = pd.read_parquet(fn, engine="pyarrow")
         documents_list = df.values.tolist()
@@ -50,7 +49,9 @@ class SearchEngine:
         print("len of dataSet: ", len(self._indexer.benchDataSet))
         end_time = datetime.now()
         print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
-        self._indexer.save_index("idx_bench")
+
+        # self._indexer.save_index("idx_bench")
+
         # cutter = statistics.mean(self._indexer.inverted_idx.values())
         # cutter = sorted(self._indexer.inverted_idx.values(), reverse=True)[int(len(self._indexer.inverted_idx) * 0.2)]
         # print("cut from value of: ", cutter)
@@ -132,5 +133,6 @@ class SearchEngine:
 
 
 def main():
-    search_engine_1.run_engine()
+    path = "data\\benchmark_data_train.snappy.parquet"
+    search_engine_1.SearchEngine.run_engine(path)
 

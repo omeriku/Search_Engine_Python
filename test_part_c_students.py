@@ -72,15 +72,15 @@ if __name__ == '__main__':
         if model_url is not None and config.get_download_model():
             import utils
 
-            dest_path = 'model.zip'
-            utils.download_file_from_google_drive(model_url, dest_path)
-            if not os.path.exists(model_dir):
-                os.mkdir(model_dir)
-            if os.path.exists(dest_path):
-                utils.unzip_file(dest_path, model_dir)
-                logging.info(f'Successfully downloaded and extracted pretrained model into {model_dir}.')
-            else:
-                logging.error('model.zip file does not exists.')
+            # dest_path = 'model.zip'
+            # utils.download_file_from_google_drive(model_url, dest_path)
+            # if not os.path.exists(model_dir):
+            #     os.mkdir(model_dir)
+            # if os.path.exists(dest_path):
+            #     utils.unzip_file(dest_path, model_dir)
+            #     logging.info(f'Successfully downloaded and extracted pretrained model into {model_dir}.')
+            # else:
+            #     logging.error('model.zip file does not exists.')
 
         # test for each search engine module
         engine_modules = ['search_engine_' + name for name in ['1', '2', 'best']]
