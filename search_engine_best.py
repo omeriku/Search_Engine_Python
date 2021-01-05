@@ -8,6 +8,7 @@ from searcher import Searcher
 import metrics
 import utils
 import search_engine_1
+import search_engine_2
 
 
 # DO NOT CHANGE THE CLASS NAME
@@ -134,5 +135,7 @@ class SearchEngine:
 
 def main():
     path = "data\\benchmark_data_train.snappy.parquet"
-    search_engine_1.SearchEngine.run_engine(path)
+    # search_engine_1.SearchEngine.run_engine(path)
+    engine2 = search_engine_2.SearchEngine()
+    engine2.run_engine_two(path)
 

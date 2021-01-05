@@ -3,6 +3,8 @@
 # spelling correction
 
 import pandas as pd
+
+import metrics
 from reader import ReadFile
 from datetime import datetime
 from configuration import ConfigClass
@@ -90,4 +92,61 @@ class SearchEngine:
         """
         searcher = Searcher(self._parser, self._indexer, model=self._model)
         return searcher.search(query)
+
+
+    def run_engine_two(self, fn):
+
+        self.build_index_from_parquet(fn)
+        queries_path = "data\\queries_train.tsv"
+
+        all_queries = SearchEngine.query_reader(queries_path)["information_need"]
+
+        for i, q in enumerate(all_queries):
+            print(q)
+            k, docs = self.search(q)
+            # print(docs[:10])
+            self.check_engine_quality(i+1, docs[:300])
+            print()
+
+        print("Avg map is :", (sum(self.map_list) / len(self.map_list)))
+
+    @staticmethod
+    def query_reader(queries_path):
+
+        data = pd.read_csv(queries_path, sep="\t")
+        return data
+
+
+    def get_parser(self):
+        return self._parser
+
+    def check_engine_quality(self, query_num, list_of_docs):
+
+        benchmark_path = "data\\benchmark_lbls_train.csv"
+        df = pd.read_csv(benchmark_path)
+
+        df_prec = df[df['query'] == query_num]
+        df_prec = df_prec[df_prec['tweet'].isin(list_of_docs)]
+        dict_for_data = df_prec.set_index('tweet')['y_true'].to_dict()
+
+        ranking = []
+        for doc in list_of_docs:
+            try:
+                ranking.append(dict_for_data[int(doc)])
+            except:
+                ranking.append(0)
+        data_df = pd.DataFrame({'query': query_num, 'tweet': list_of_docs, 'y_true': ranking})
+
+        df_rec = df[df['query'] == query_num]
+        recall_total = len(df_rec[df_rec['y_true'] == 1.0])
+
+        print("relevant doc found :" , len (data_df[data_df['y_true'] == 1.0]))
+        print("recall total :", recall_total)
+
+        print("precision of ", query_num, "is :", metrics.precision(data_df, True, query_number=query_num))
+        print("recall of ", query_num, "is :", metrics.recall_single(data_df, recall_total, query_num))
+        print("tagged docs", len(df_prec))
+        map_of_query = metrics.map(data_df)
+        print("map of", query_num, "is :", map_of_query)
+        self.map_list.append(map_of_query)
 
