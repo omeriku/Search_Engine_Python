@@ -27,7 +27,7 @@ def run_engine():
         parsed_q = engine.get_parser().parse_sentence(q)
         k, docs = engine.search(q)
         print(docs[:10])
-        engine.check_engine_quality(i+1, docs[:300])
+        engine.check_engine_quality(i+1, docs[:50])
 
 
 
