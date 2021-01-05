@@ -22,6 +22,7 @@ class SearchEngine:
         self._parser = Parse()
         self._indexer = Indexer(config)
         self._model = None
+        self.map_list = []
 
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.
@@ -74,7 +75,7 @@ class SearchEngine:
     def load_precomputed_model(self, model_dir=None):
         """
         Loads a pre-computed model (or models) so we can answer queries.
-        This is where you would load models like word2vec, LSI, LDA, etc. and 
+        This is where you would load models like word2vec, LSI, LDA, etc. and
         assign to self._model, which is passed on to the searcher at query time.
         """
         pass
@@ -82,14 +83,14 @@ class SearchEngine:
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.
     def search(self, query):
-        """ 
-        Executes a query over an existing index and returns the number of 
+        """
+        Executes a query over an existing index and returns the number of
         relevant docs and an ordered list of search results.
         Input:
             query - string.
         Output:
-            A tuple containing the number of relevant search results, and 
-            a list of tweet_ids where the first element is the most relavant 
+            A tuple containing the number of relevant search results, and
+            a list of tweet_ids where the first element is the most relavant
             and the last is the least relevant result.
         """
         searcher = Searcher(self._parser, self._indexer, model=self._model)
@@ -114,28 +115,21 @@ class SearchEngine:
             except:
                 ranking.append(0)
         data_df = pd.DataFrame({'query': query_num, 'tweet':list_of_docs, 'y_true': ranking})
-        # data_df['query'] = query_num
-        # data_df['y_true'] = None
-        #
-        # for index, row in data_df.iterrows():
-        #     id = int(row['tweet'])
-        #     if id in dict_for_data.keys():
-        #         row['y_true'] = dict_for_data[id]
-        #     else:
-        #         row['y_true'] = 0
-        #
-        print(data_df)
 
 
         df_rec = df[df['query'] == query_num]
         recall_total = len(df_rec[df_rec['y_true'] == 1.0])
 
-        print("recall total :", recall_total)
+        # print("relevant doc found :" , len (data_df[data_df['y_true'] == 1.0]))
+        # print("recall total :", recall_total)
+        #
+        # print("precision of ", query_num, "is :", metrics.precision(data_df, True, query_number=query_num))
+        # print("recall of ", query_num, "is :", metrics.recall_single(data_df, recall_total, query_num))
+        # print("tagged docs", len(df_prec))
+        map_of_query = metrics.map(data_df)
+        print("map is :", map_of_query)
+        self.map_list.append(map_of_query)
 
-        print("precision of ", query_num, "is :", metrics.precision(data_df, True, query_number=query_num))
-        print("recall of ", query_num, "is :", metrics.recall_single(data_df, recall_total, query_num))
-        print("map is :", metrics.map(data_df))
-        print("tagged docs", len(df_prec))
 
 
 def main():
