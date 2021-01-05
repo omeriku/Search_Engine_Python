@@ -26,10 +26,11 @@ def run_engine():
         print(q)
         parsed_q = engine.get_parser().parse_sentence(q)
         k, docs = engine.search(q)
-        print(docs[:10])
-        engine.check_engine_quality(i+1, docs[:50])
+        # print(docs[:10])
+        engine.check_engine_quality(i+1, docs[:300])
+        print()
 
-
+    print("Avg map is :", (sum(engine.map_list) / len(engine.map_list)))
 
 
 
