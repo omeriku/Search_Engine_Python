@@ -45,6 +45,15 @@ class SearchEngine:
             number_of_documents += 1
             # index the document data
             self._indexer.add_new_doc(parsed_document)
+        max_val = max(self._indexer.inverted_idx.values())/1.5
+        min_val = min(self._indexer.inverted_idx.values())*2
+        cutted_inx = {key: value for key, value in self._indexer.inverted_idx.items() if max_val > value > min_val}
+        self._indexer.inverted_idx = cutted_inx
+
+        cutted_post = {key: value for key, value in self._indexer.postingDict.items() if key in self._indexer.inverted_idx}
+
+        self._indexer.postingDict = cutted_post
+
         print("len of inverted: ", len(self._indexer.inverted_idx))
         print("len of posting: ", len(self._indexer.postingDict))
         print("len of dataSet: ", len(self._indexer.benchDataSet))
@@ -138,6 +147,7 @@ class SearchEngine:
 def main():
     path = "data\\benchmark_data_train.snappy.parquet"
     # search_engine_1.SearchEngine.run_engine(path)
-    engine2 = search_engine_2.SearchEngine()
-    engine2.run_engine_two(path)
-
+    # engine2 = search_engine_2.SearchEngine()
+    # engine2.run_engine_two(path)
+    e = SearchEngine(None)
+    e.build_index_from_parquet(path)

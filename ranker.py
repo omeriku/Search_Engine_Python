@@ -34,22 +34,24 @@ class Ranker:
                 else:
                     finalTermInDoc = termInDoc.lower()
 
+                try:
+                    listOfTerm = indexer.postingDict[finalTermInDoc]
 
-                listOfTerm = indexer.postingDict[finalTermInDoc]
+                    tf = Ranker.findTF(tweetId, listOfTerm)
+                    idf = math.log(numOfDocsInCorpus / indexer.inverted_idx[finalTermInDoc], 2)
+                    wij = tf * idf
 
-                tf = Ranker.findTF(tweetId, listOfTerm)
-                idf = math.log(numOfDocsInCorpus / indexer.inverted_idx[finalTermInDoc], 2)
-                wij = tf * idf
+                    # even if the term is not in the quey them add to mechane
+                    term_wijSquare += math.pow(wij, 2)
 
-                # even if the term is not in the quey them add to mechane
-                term_wijSquare += math.pow(wij, 2)
-
+                except:
+                    continue
 
                 # even if the term is not in the quey them add to mechane
                 if finalTermInDoc in combined:
                     # if the term in wordnet then decrease wij
                     if finalTermInDoc in wordnet:
-                        wij *= 0.65
+                        wij *= 0.85
                     sumMone += wij
                     query_wiqSquare += 1
 
