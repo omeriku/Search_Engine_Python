@@ -70,6 +70,8 @@ class SearchEngine:
         Input:
             fn - file name of pickled index.
         """
+        if fn.__contains__(".pkl"):
+            fn = fn.split(".")[0]
         self._indexer.load_index(fn)
 
     # DO NOT MODIFY THIS SIGNATURE
