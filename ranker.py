@@ -25,6 +25,7 @@ class Ranker:
             sumMone = 0
             term_wijSquare = 0
             query_wiqSquare = 0
+            wordnet_counter = 0
             tokensOfDoc = indexer.benchDataSet[tweetId].keys()
             # Go over every token in the tweetId
             for termInDoc in tokensOfDoc:
@@ -52,6 +53,7 @@ class Ranker:
                     # if the term in wordnet then decrease wij
                     if finalTermInDoc in wordnet:
                         wij *= 0.85
+                        wordnet_counter += 1
                     sumMone += wij
                     query_wiqSquare += 1
 
@@ -67,8 +69,14 @@ class Ranker:
             else:
                 cosSimilarity = sumMone / sumMechane
             #dict_Of_CosSimilarity[tweetId] = cosSimilarity
-            cosSimilarity *= (query_wiqSquare / len(query))
-            listOfTuplesCos.append((tweetId,cosSimilarity))
+
+            if len(wordnet) > 0:
+                wordnet_factor = (wordnet_counter / len(wordnet))
+            else:
+                wordnet_factor = 0
+            cosSimilarity = 0.7 * cosSimilarity + 0.3 * sumMone
+            cosSimilarity *= ( (query_wiqSquare / len(query)) + wordnet_factor)
+            listOfTuplesCos.append((tweetId, cosSimilarity))
 
 
         ranked_results = sorted(listOfTuplesCos,key=lambda item:item[1],reverse=True)
@@ -82,12 +90,11 @@ class Ranker:
         #ranked_results = sorted(relevant_docs.items(), key=lambda item: item[1], reverse=True)
         if k is not None:
             ranked_results = ranked_results[:k]
-        x=[d[0] for d in ranked_results]
+
         return [d[0] for d in ranked_results]
 
-
     @staticmethod
-    def findTF(tweetId,listOfDocs):
+    def findTF(tweetId, listOfDocs):
         # Find tf value of term in doc
         for doc in listOfDocs:
             if doc[0] == tweetId:

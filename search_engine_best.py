@@ -45,8 +45,8 @@ class SearchEngine:
             number_of_documents += 1
             # index the document data
             self._indexer.add_new_doc(parsed_document)
-        max_val = max(self._indexer.inverted_idx.values())/1.5
-        min_val = min(self._indexer.inverted_idx.values())*2
+        max_val = max(self._indexer.inverted_idx.values())/2.5
+        min_val = min(self._indexer.inverted_idx.values())
         cutted_inx = {key: value for key, value in self._indexer.inverted_idx.items() if max_val > value > min_val}
         self._indexer.inverted_idx = cutted_inx
 
