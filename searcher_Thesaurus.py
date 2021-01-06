@@ -126,8 +126,8 @@ class Searcher:
         for i, term in enumerate(toAdd):
             listToAdd[i] = term.lower()
 
-        print("list: ", listToAdd)
-        print("how much: ", len(listToAdd))
+        #print("list: ", listToAdd)
+        #print("how much: ", len(listToAdd))
         return listToAdd
 
     @staticmethod
