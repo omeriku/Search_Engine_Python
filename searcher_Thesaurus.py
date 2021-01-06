@@ -34,17 +34,17 @@ class Searcher:
             and the last is the least relevant result.
         """
         query_as_list = self._parser.parse_sentence(query)
-        q_wordnet = self.do_thesaurus(query_as_list)
+        q_thesaurus = self.do_thesaurus(query_as_list)
 
         self.upper_lower_case(query_as_list, self._indexer)
-        self.upper_lower_case(q_wordnet, self._indexer)
+        self.upper_lower_case(q_thesaurus, self._indexer)
 
         # print("query as list: ", query_as_list)
         # print("wordnet :", q_wordnet)
 
-        relevant_docs = self._relevant_docs_from_posting(query_as_list + q_wordnet)
+        relevant_docs = self._relevant_docs_from_posting(query_as_list + q_thesaurus)
         n_relevant = len(relevant_docs)
-        ranked_doc_ids = Ranker.rank_relevant_docs(query_as_list, q_wordnet, relevant_docs, self._indexer, k) # @Todo add omer code
+        ranked_doc_ids = Ranker.rank_relevant_docs(query_as_list, q_thesaurus, relevant_docs, self._indexer, k)
         return n_relevant, ranked_doc_ids
 
     # feel free to change the signature and/or implementation of this function
