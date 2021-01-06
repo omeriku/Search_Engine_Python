@@ -72,7 +72,7 @@ class SearchEngine:
         """
         if fn.__contains__(".pkl"):
             fn = fn.split(".")[0]
-        self._indexer.load_index(fn)
+        return self._indexer.load_index(fn)
 
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.

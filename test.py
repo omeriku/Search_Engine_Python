@@ -6,18 +6,21 @@
 # query = [1, 2, 10]
 
 
-import re
+# import re
+#
+#
+# url_stop = ["/", "\\", "-", "=", '%', "'", " ", ":", "`", '``', '_', '"', "...", '``', "''", "www."]
+# delimiter = "|".join(url_stop)
+# regexPattern = '|'.join(map(re.escape, url_stop))
+# text = "https://www.stackoverflow.com/questions/32026365/python-split-string-with-delimiters-from-a-list"
+# parsed = [t for t in re.split(regexPattern, text) if (len(t) > 1 )]
+# print(parsed)
 
+fn = "blabla.pkl"
+if fn.__contains__(".pkl"):
+    fn = fn.split(".")[0]
 
-url_stop = ["/", "\\", "-", "=", '%', "'", " ", ":", "`", '``', '_', '"', "...", '``', "''", "www."]
-delimiter = "|".join(url_stop)
-regexPattern = '|'.join(map(re.escape, url_stop))
-text = "https://www.stackoverflow.com/questions/32026365/python-split-string-with-delimiters-from-a-list"
-parsed = [t for t in re.split(regexPattern, text) if (len(t) > 1 )]
-print(parsed)
-
-
-
+print(fn)
 
 
 
