@@ -34,7 +34,7 @@ class Searcher:
             and the last is the least relevant result.
         """
         query_as_list = self._parser.parse_sentence(query)
-        q_wordnet = self.do_wordnet(query_as_list)
+        q_wordnet = self.do_thesaurus(query_as_list)
 
         self.upper_lower_case(query_as_list, self._indexer)
         self.upper_lower_case(q_wordnet, self._indexer)
@@ -74,62 +74,61 @@ class Searcher:
         return relevant_docs
 
     @staticmethod
-    def do_wordnet(query):
-        related = set()
-        lowered = []
+    def do_thesaurus(query):
 
+        lowered = []
+        toAdd = set()
+        # lower every word in query
         for word in query:
             lowered.append(word.lower())
 
         # Go over every word in query
         for word in lowered:
-            toAdd = set()
+            counterNoMoreThen4 = 0
+
             dictionary = thes.synonyms(word)[1][1]
+
+            # find similar expressions and their scores
             listOfScores = thes.scored_synonyms(word)[1][1]
             dictOfScored = dict(listOfScores)
-            #print(dictOfScored)
-            #print(dictionary)
+            # print("\n word: ",word)
+            # print(dictOfScored)
+            # print(dictionary)
 
             # Go over the thesaurus words
-            for idx, syn in enumerate(dictionary):
-                related.add(syn)
-            listRelated = list(related)
-            #dictOfScored = {key: value for key, value in dictOfScored if value > 0.2}
+            #for idx, syn in enumerate(dictionary):
+            #    related.append(syn)
 
+            # Go over the scored dictionary
             for key in dictOfScored:
-                if dictOfScored[key] > 0.2 and key not in query:
-                    toAdd.add(key)
 
-            if len(toAdd) > 0:
-                print("word: ",word," list: ",list(toAdd))
+                # Check if similar enough and no more then 4 per word
+                if dictOfScored[key] > 0.21 and key not in lowered and counterNoMoreThen4 < 4:
+                    counterNoMoreThen4 += 1
 
+                    # if the similar term contains ' '
+                    if key.__contains__(' '):
+                        splited = key.split()
 
+                        # add only relevant term
+                        for term in splited:
+                            if term not in lowered:
+                                toAdd.add(term)
+                    else:
+                        toAdd.add(key)
+                elif counterNoMoreThen4 == 4:
+                    # Too many terms for word
+                    continue
+            #print("word: ",word," similar:",list(toAdd))
 
+        # Lower term in listToAdd
+        listToAdd = list(toAdd)
+        for i, term in enumerate(toAdd):
+            listToAdd[i] = term.lower()
 
-
-
-
-            #print()
-            #print("dict- word: ",word," similar: ",listRelated)
-            #print("scored- word: ",word," similar: ",listOfScores)
-            #print()
-            for term in listRelated:
-                term = term.lower()
-
-
-
-            #for dup in wordnet.synsets(word):
-            #    if dup.lemmas()[0].name().__contains__("_"):
-            #        all = dup.lemmas()[0].name().split("_")
-            #        for name in all:
-            #            if name.lower() not in lowered:
-            #                unique.add(name.lower())
-            #    else:
-            #        name = dup.lemmas()[0].name().lower()
-            #        if name.lower() not in lowered:
-            #            unique.add(name)
-
-        return list(related)
+        print("list: ", listToAdd)
+        print("how much: ", len(listToAdd))
+        return listToAdd
 
     @staticmethod
     def upper_lower_case(list_of_words, indexer):
