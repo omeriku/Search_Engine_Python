@@ -195,7 +195,7 @@ def main():
         # print(docs[:10])
         e.check_engine_quality(i+1, docs)
         print()
-    print("Done all queries, now printing statistics\n")
+    print("---- Done all queries, now printing statistics ----\n")
 
     print("Avg map is :", (statistics.mean(e.map_list)))
     print("Avg recall is :", (statistics.mean(e.recall_list)))
