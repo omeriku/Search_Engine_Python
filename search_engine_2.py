@@ -1,7 +1,4 @@
-
-
-# spelling correction
-
+#Thesaurus
 import pandas as pd
 
 import metrics
