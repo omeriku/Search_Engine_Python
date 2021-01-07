@@ -120,7 +120,7 @@ class Indexer:
         Input:
               fn - file name of pickled index.
         """
-        utils.save_obj(self,fn)
+        utils.save_obj(self, fn)
 
     # feel free to change the signature and/or implementation of this function 
     # or drop altogether.

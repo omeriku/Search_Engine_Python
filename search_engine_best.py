@@ -35,6 +35,7 @@ class SearchEngine:
         """
         print("\nNow Starting search engine BEST")
         total_time = datetime.now()
+
         df = pd.read_parquet(fn, engine="pyarrow")
         documents_list = df.values.tolist()
         # Iterate over every document in the file
@@ -54,6 +55,8 @@ class SearchEngine:
 
         self._indexer.postingDict = cutted_post
 
+        # self.load_index("idx_bench")
+
         print("len of inverted: ", len(self._indexer.inverted_idx))
         print("len of posting: ", len(self._indexer.postingDict))
         print("len of dataSet: ", len(self._indexer.benchDataSet))
@@ -61,6 +64,9 @@ class SearchEngine:
         print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
 
         # self._indexer.save_index("idx_bench")
+
+
+
 
         # cutter = statistics.mean(self._indexer.inverted_idx.values())
         # cutter = sorted(self._indexer.inverted_idx.values(), reverse=True)[int(len(self._indexer.inverted_idx) * 0.2)]
@@ -81,7 +87,9 @@ class SearchEngine:
         """
         if fn.__contains__(".pkl"):
             fn = fn.split(".")[0]
-        return self._indexer.load_index(fn)
+        data = self._indexer.load_index(fn)
+        self._indexer = data
+        return data
 
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.

@@ -57,15 +57,7 @@ class SearchEngine:
 
         print('Finished parsing and indexing.')
 
-    # DO NOT MODIFY THIS SIGNATURE
-    # You can change the internal implementation as you see fit.
-    def load_index(self, fn):
-        """
-        Loads a pre-computed index (or indices) so we can answer queries.
-        Input:
-            fn - file name of pickled index.
-        """
-        self._indexer.load_index(fn)
+
 
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.
