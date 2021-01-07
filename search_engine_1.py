@@ -78,7 +78,6 @@ class SearchEngine:
     @staticmethod
     def run_engine(fn):
         path = fn
-        queries_path = "data\\queries_train.tsv"
 
         config = ConfigClass()
         config.corpusPath = path

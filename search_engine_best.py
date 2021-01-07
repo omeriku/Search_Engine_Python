@@ -9,6 +9,7 @@ import metrics
 import utils
 import search_engine_1
 import search_engine_2
+import statistics
 
 
 # DO NOT CHANGE THE CLASS NAME
@@ -22,6 +23,11 @@ class SearchEngine:
         self._indexer = Indexer(config)
         self._model = None
         self.map_list = []
+        self.prec5_list = []
+        self.prec10_list = []
+        self.prec50_list = []
+        self.prec_total_list = []
+        self.recall_list = []
 
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.
@@ -129,33 +135,96 @@ class SearchEngine:
         df_prec = df_prec[df_prec['tweet'].isin(list_of_docs)]
         dict_for_data = df_prec.set_index('tweet')['y_true'].to_dict()
 
+        rmv_lst = []
+
         ranking = []
         for doc in list_of_docs:
             try:
                 ranking.append(dict_for_data[int(doc)])
             except:
-                ranking.append(0)
+                rmv_lst.append(doc)
+        for d in rmv_lst:
+            list_of_docs.remove(d)
+
         data_df = pd.DataFrame({'query': query_num, 'tweet':list_of_docs, 'y_true': ranking})
 
         df_rec = df[df['query'] == query_num]
         recall_total = len(df_rec[df_rec['y_true'] == 1.0])
 
-        # print("relevant doc found :" , len (data_df[data_df['y_true'] == 1.0]))
-        # print("recall total :", recall_total)
-        #
-        # print("precision of ", query_num, "is :", metrics.precision(data_df, True, query_number=query_num))
-        # print("recall of ", query_num, "is :", metrics.recall_single(data_df, recall_total, query_num))
-        # print("tagged docs", len(df_prec))
+        # print("total Relevant doc found with tag 1 :" , len (data_df[data_df['y_true'] == 1.0]))
+        # print("total NON relevant doc found with tag 0 :" , len (data_df[data_df['y_true'] == 0]))
+        # print("found total of", len(df_prec), "tagged docs")
+
+        prec5 = metrics.precision_at_n(data_df, query_num, 5)
+        prec10 = metrics.precision_at_n(data_df, query_num, 10)
+        prec50 = metrics.precision_at_n(data_df, query_num, 50)
+        prec_total = metrics.precision(data_df, True, query_number=query_num)
         map_of_query = metrics.map(data_df)
-        print("map of", query_num, "is :", map_of_query)
+        recall_val = metrics.recall_single(data_df, recall_total, query_num)
         self.map_list.append(map_of_query)
+        self.prec5_list.append(prec5)
+        self.prec10_list.append(prec10)
+        self.prec50_list.append(prec50)
+        self.prec_total_list.append(prec_total)
+        self.recall_list.append(recall_val)
+
+        print()
+        print("precision at 5 of query", query_num, "is :", prec5)
+        print("precision at 10 of query", query_num, "is :", prec10)
+        print("precision at 50 of query", query_num, "is :", prec50)
+        print("precision of query", query_num, "is :", prec_total)
+        print("recall of query", query_num, "is :", recall_val)
+        print("map of query", query_num, "is :", map_of_query)
+
 
 
 
 def main():
     path = "data\\benchmark_data_train.snappy.parquet"
-    # search_engine_1.SearchEngine.run_engine(path)
-    # engine2 = search_engine_2.SearchEngine()
-    # engine2.run_engine_two(path)
+    queries_path = "data\\queries_train.tsv"
+    data = pd.read_csv(queries_path, sep="\t")
+    all_queries = data["information_need"]
+
     e = SearchEngine(None)
     e.build_index_from_parquet(path)
+
+    for i, q in enumerate(all_queries):
+        print("---- Query Number:", i+1, "----")
+        print(q)
+        k, docs = e.search(q)
+        # print(docs[:10])
+        e.check_engine_quality(i+1, docs)
+        print()
+    print("Done all queries, now printing statistics\n")
+
+    print("Avg map is :", (statistics.mean(e.map_list)))
+    print("Avg recall is :", (statistics.mean(e.recall_list)))
+    print("Avg precision at 5 is :", (statistics.mean(e.prec5_list)))
+    print("Avg precision at 10 is :", (statistics.mean(e.prec10_list)))
+    print("Avg precision at 50 is :", (statistics.mean(e.prec50_list)))
+    print("Avg precision total is :", (statistics.mean(e.prec_total_list)))
+
+    print()
+    print("Median map is :", (statistics.median(e.map_list)))
+    print("Median recall is :", (statistics.median(e.recall_list)))
+    print("Median precision at 5 is :", (statistics.median(e.prec5_list)))
+    print("Median precision at 10 is :", (statistics.median(e.prec10_list)))
+    print("Median precision at 50 is :", (statistics.median(e.prec50_list)))
+    print("Median precision total is :", (statistics.median(e.prec_total_list)))
+
+    print()
+    print("Max map is :", (max(e.map_list)))
+    print("Max recall is :", (max(e.recall_list)))
+    print("Max precision at 5 is :", (max(e.prec5_list)))
+    print("Max precision at 10 is :", (max(e.prec10_list)))
+    print("Max precision at 50 is :", (max(e.prec50_list)))
+    print("Max precision total is :", (max(e.prec_total_list)))
+
+    print()
+    print("Min map is :", (min(e.map_list)))
+    print("Min recall is :", (min(e.recall_list)))
+    print("Min precision at 5 is :", (min(e.prec5_list)))
+    print("Min precision at 10 is :", (min(e.prec10_list)))
+    print("Min precision at 50 is :", (min(e.prec50_list)))
+    print("Min precision total is :", (min(e.prec_total_list)))
+
