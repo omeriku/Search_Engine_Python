@@ -8,25 +8,34 @@ class Ranker:
         pass
 
     @staticmethod
-    def rank_relevant_docs(query,wordnet,relevant_docs, indexer, k=None):
+    def rank_relevant_docs(query, related_terms, relevant_docs, indexer, k=None):
         """
         This function provides rank for each relevant document and sorts them by their scores.
         The current score considers solely the number of terms shared by the tweet (full_text) and query.
+        :param indexer:
+        :param related_terms:
+        :param query:
         :param k: number of most relevant docs to return, default to everything.
         :param relevant_docs: dictionary of documents that contains at least one term from the query.
         :return: sorted list of documents by score
         """
         numOfDocsInCorpus = len(indexer.benchDataSet)
-        #dict_Of_CosSimilarity = {}
         listOfTuplesCos = []
-        combined = query + wordnet
+        combined = query + related_terms
         # Go over every relevant doc
+
+        # wij - tf-idf for each term in eat tweet
+        # term_wijSquare = += every wij^2
+        # query_wiqSquare = +=1 if the term is in combined
+        # sumMone += wij
+        # wijSquare += math.pow(wij,2)
+
         for tweetId in relevant_docs:
             sumMone = 0
             term_wijSquare = 0
             query_wiqSquare = 0
             wordnet_counter = 0
-            tokensOfDoc = indexer.benchDataSet[tweetId].keys()
+            tokensOfDoc = indexer.benchDataSet[tweetId]
             # Go over every token in the tweetId
             for termInDoc in tokensOfDoc:
                 # Calculate his wij
@@ -51,43 +60,28 @@ class Ranker:
                 # even if the term is not in the quey them add to mechane
                 if finalTermInDoc in combined:
                     # if the term in wordnet then decrease wij
-                    if finalTermInDoc in wordnet:
+                    if finalTermInDoc in related_terms:
                         wij *= 0.85
                         wordnet_counter += 1
                     sumMone += wij
                     query_wiqSquare += 1
-
-                # wij - tf-idf for each term in eat tweet
-                # term_wijSquare = += every wij^2
-                # query_wiqSquare = +=1 if the term is in combined
-                # sumMone += wij
-                # wijSquare += math.pow(wij,2)
 
             sumMechane = math.sqrt(term_wijSquare * query_wiqSquare)
             if sumMechane == 0:
                 cosSimilarity = 0
             else:
                 cosSimilarity = sumMone / sumMechane
-            #dict_Of_CosSimilarity[tweetId] = cosSimilarity
 
-            if len(wordnet) > 0:
-                wordnet_factor = (wordnet_counter / len(wordnet))
+            if len(related_terms) > 0:
+                wordnet_factor = (wordnet_counter / len(related_terms))
             else:
                 wordnet_factor = 0
             cosSimilarity = 0.7 * cosSimilarity + 0.3 * sumMone
             cosSimilarity *= ( (query_wiqSquare / len(query)) + wordnet_factor)
             listOfTuplesCos.append((tweetId, cosSimilarity))
 
-
         ranked_results = sorted(listOfTuplesCos,key=lambda item:item[1],reverse=True)
-        # print()
-        # print(ranked_results[:8])
-        # print("text1: ",indexer.benchDataSet[ranked_results[0][0]])
-        # print("text2: ", indexer.benchDataSet[ranked_results[1][0]])
-        # print("text3: ", indexer.benchDataSet[ranked_results[2][0]])
-        # print()
 
-        #ranked_results = sorted(relevant_docs.items(), key=lambda item: item[1], reverse=True)
         if k is not None:
             ranked_results = ranked_results[:k]
 
