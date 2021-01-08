@@ -1,9 +1,6 @@
 # spelling
 from autocorrect import Speller
 from ranker import Ranker
-from nltk.corpus import wordnet
-import utils
-from indexer import Indexer
 
 
 # DO NOT MODIFY CLASS NAME

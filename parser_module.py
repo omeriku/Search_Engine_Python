@@ -24,7 +24,7 @@ class Parse:
         # text_tokens_without_stopwords = [w.lower() for w in text_tokens if w not in self.stop_words]
         return tokenized_text_with_rules
 
-    def parse_doc(self, doc_as_list):
+    def parse_doc(self, doc_as_list, stemmimg = True):
         """
         This function takes a tweet document as list and break it into different fields
         :param doc_as_list: list re-presenting the tweet.
@@ -52,7 +52,7 @@ class Parse:
 
         if len(url) > 2:
             full_text += url
-        tokenized_text = self.parse_sentence(full_text)
+        tokenized_text = self.parse_sentence(full_text, stemmimg)
 
         doc_length = len(tokenized_text)  # after text operations.
 
@@ -239,7 +239,6 @@ class Parse:
                 add += token_url
                 continue
 
-
         for w in rmv:
             if w in token_text:
                 token_text.remove(w)
@@ -255,6 +254,7 @@ class Parse:
                     token_text[i] = s.stem_term(token).upper()
                 else:
                     token_text[i] = s.stem_term(token)
+
 
         return token_text
 
