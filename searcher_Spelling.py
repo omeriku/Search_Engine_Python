@@ -44,9 +44,10 @@ class Searcher:
 
         # print("query as list: ", query_as_list)
         # print("wordnet :", q_wordnet)
-
+        # Find relevant docs
         relevant_docs = self._relevant_docs_from_posting(query_as_list + q_new_spelling + wrongWords)
         n_relevant = len(relevant_docs)
+        # Send all to ranking
         ranked_doc_ids = Ranker.rank_relevant_docs(query_as_list + q_new_spelling ,wrongWords, relevant_docs, self._indexer, k)
         return n_relevant, ranked_doc_ids
 
@@ -98,7 +99,9 @@ class Searcher:
 
             # if it was a wrong spelling
             if afterSpelling != word:
+                # its a new word now right
                 nowSpelled.append(afterSpelling)
+                # not spelled right
                 toDeleteFromQuery.append(word)
 
         return nowSpelled,toDeleteFromQuery
@@ -107,7 +110,9 @@ class Searcher:
     @staticmethod
     def deleteWrongSpelledWords(query, wrongWords):
         newQuery = []
+        # for each word in the query
         for term in query:
+            # if one of them was spelled wrong
             if term not in wrongWords:
                 newQuery.append(term)
         return newQuery

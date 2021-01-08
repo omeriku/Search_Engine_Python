@@ -77,8 +77,9 @@ class Searcher:
         lowered = []
         for word in query:
             lowered.append(word.lower())
-
+        # Go over every word in the query
         for word in lowered:
+            # Find similar words
             for dup in wordnet.synsets(word):
                 if dup.lemmas()[0].name().__contains__("_"):
                     all = dup.lemmas()[0].name().split("_")

@@ -42,8 +42,10 @@ class Searcher:
         # print("query as list: ", query_as_list)
         # print("wordnet :", q_wordnet)
 
+        # Find relevant docs
         relevant_docs = self._relevant_docs_from_posting(query_as_list + q_thesaurus)
         n_relevant = len(relevant_docs)
+        # Send all to ranking
         ranked_doc_ids = Ranker.rank_relevant_docs(query_as_list, q_thesaurus, relevant_docs, self._indexer, k)
         return n_relevant, ranked_doc_ids
 
