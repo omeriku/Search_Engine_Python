@@ -28,7 +28,7 @@ class Indexer:
         """
         # Get data that needs to be saved
         document_dictionary = document.term_doc_dictionary
-        self.benchDataSet[document.tweet_id] = document.term_doc_dictionary.keys()
+        self.benchDataSet[document.tweet_id] = list(document.term_doc_dictionary.keys())
 
         # Check if the document dictionary isn't empty
         if len(document_dictionary.keys()) != 0:

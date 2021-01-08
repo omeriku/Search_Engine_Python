@@ -39,7 +39,7 @@ class SearchEngine:
             No output, just modifies the internal _indexer object.
         """
         print("\nNow Starting search engine BEST")
-        # total_time = datetime.now()
+        total_time = datetime.now()
 
         df = pd.read_parquet(fn, engine="pyarrow")
         documents_list = df.values.tolist()
@@ -69,8 +69,9 @@ class SearchEngine:
         # print("len of dataSet: ", len(self._indexer.benchDataSet))
         # end_time = datetime.now()
         # print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
-
+        #
         # self._indexer.save_index("idx_bench")
+        # print("index saved")
 
 
 
@@ -82,7 +83,7 @@ class SearchEngine:
         # sorted_dic = {key: value for key, value in sorted(self._indexer.inverted_idx.items(), key=lambda item: item[1], reverse=True) if key.__contains__(".com")}
         # print("sorted =",len(sorted_dic))
         # print(sorted_dic)
-        print('Finished parsing and indexing.')
+        # print('Finished parsing and indexing.')
 
     # DO NOT MODIFY THIS SIGNATURE
     # You can change the internal implementation as you see fit.
@@ -236,4 +237,4 @@ def main():
     print("Min precision at 50 is :", (min(e.prec50_list)))
     print("Min precision total is :", (min(e.prec_total_list)))
 
-main()
+# main()
