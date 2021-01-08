@@ -104,7 +104,8 @@ class Searcher:
         return nowSpelled,toDeleteFromQuery
 
     # Delete from original query the words that were spelled wrong
-    def deleteWrongSpelledWords(self, query, wrongWords):
+    @staticmethod
+    def deleteWrongSpelledWords(query, wrongWords):
         newQuery = []
         for term in query:
             if term not in wrongWords:

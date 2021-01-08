@@ -1,8 +1,8 @@
+
 # spelling correction
+
 import statistics
-
 import pandas as pd
-
 import metrics
 from reader import ReadFile
 from datetime import datetime
@@ -41,7 +41,7 @@ class SearchEngine:
         """
         print("\nNow Starting search engine 3")
 
-        total_time = datetime.now()
+        # total_time = datetime.now()
         df = pd.read_parquet(fn, engine="pyarrow")
         documents_list = df.values.tolist()
         # Iterate over every document in the file
@@ -52,13 +52,13 @@ class SearchEngine:
             number_of_documents += 1
             # index the document data
             self._indexer.add_new_doc(parsed_document)
-        print("len of inverted: ", len(self._indexer.inverted_idx))
-        print("len of posting: ", len(self._indexer.postingDict))
-        print("len of dataSet: ", len(self._indexer.benchDataSet))
-        end_time = datetime.now()
-        print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
-
-        print('Finished parsing and indexing.')
+        # print("len of inverted: ", len(self._indexer.inverted_idx))
+        # print("len of posting: ", len(self._indexer.postingDict))
+        # print("len of dataSet: ", len(self._indexer.benchDataSet))
+        # end_time = datetime.now()
+        # print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
+        #
+        # print('Finished parsing and indexing.')
 
 
 
@@ -214,4 +214,4 @@ def main():
     print("Min precision at 50 is :", (min(e.prec50_list)))
     print("Min precision total is :", (min(e.prec_total_list)))
 
-main()
+# main()

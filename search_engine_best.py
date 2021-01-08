@@ -7,8 +7,7 @@ from indexer import Indexer
 from searcher import Searcher
 import metrics
 import utils
-import search_engine_1
-import search_engine_2
+
 import statistics
 
 
@@ -40,7 +39,7 @@ class SearchEngine:
             No output, just modifies the internal _indexer object.
         """
         print("\nNow Starting search engine BEST")
-        total_time = datetime.now()
+        # total_time = datetime.now()
 
         df = pd.read_parquet(fn, engine="pyarrow")
         documents_list = df.values.tolist()
@@ -63,11 +62,11 @@ class SearchEngine:
 
         # self.load_index("idx_bench")
 
-        print("len of inverted: ", len(self._indexer.inverted_idx))
-        print("len of posting: ", len(self._indexer.postingDict))
-        print("len of dataSet: ", len(self._indexer.benchDataSet))
-        end_time = datetime.now()
-        print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
+        # print("len of inverted: ", len(self._indexer.inverted_idx))
+        # print("len of posting: ", len(self._indexer.postingDict))
+        # print("len of dataSet: ", len(self._indexer.benchDataSet))
+        # end_time = datetime.now()
+        # print('\n ------ Time To Retrieve: {}'.format(end_time - total_time), " ------\n")
 
         # self._indexer.save_index("idx_bench")
 
@@ -228,3 +227,4 @@ def main():
     print("Min precision at 50 is :", (min(e.prec50_list)))
     print("Min precision total is :", (min(e.prec_total_list)))
 
+main()
