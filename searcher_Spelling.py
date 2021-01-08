@@ -32,9 +32,9 @@ class Searcher:
         """
         query_as_list = self._parser.parse_sentence(query)
         q_new_spelling, wrongWords = self.do_spelling(query_as_list)
-        print("query_as_list: ", query_as_list)
-        print("q_new_spelling: ", q_new_spelling)
-        print("wrongWords: ", wrongWords)
+        # print("query_as_list: ", query_as_list)
+        # print("q_new_spelling: ", q_new_spelling)
+        # print("wrongWords: ", wrongWords)
         query_as_list = self.deleteWrongSpelledWords(query_as_list,wrongWords)
 
         self.upper_lower_case(query_as_list, self._indexer)
@@ -84,7 +84,6 @@ class Searcher:
                 list_of_words[i] = w.lower()
             elif w.upper() in indexer.inverted_idx:
                 list_of_words[i] = w.upper()
-        # @Todo what with words that not in inverted
 
     @staticmethod
     def do_spelling(query):
