@@ -77,7 +77,11 @@ class SearchEngine:
         return self._parser
 
     def check_engine_quality(self, query_num, list_of_docs):
-
+        """
+        :param query_num:
+        :param list_of_docs:
+        :return: no return. prints metrics of the query. precision, recall, map.
+        """
         benchmark_path = "data\\benchmark_lbls_train.csv"
         df = pd.read_csv(benchmark_path)
 
@@ -88,6 +92,7 @@ class SearchEngine:
         rmv_lst = []
 
         ranking = []
+        # Add to list for rank
         for doc in list_of_docs:
             try:
                 ranking.append(dict_for_data[int(doc)])
@@ -104,7 +109,7 @@ class SearchEngine:
         # print("total Relevant doc found with tag 1 :" , len (data_df[data_df['y_true'] == 1.0]))
         # print("total NON relevant doc found with tag 0 :" , len (data_df[data_df['y_true'] == 0]))
         # print("found total of", len(df_prec), "tagged docs")
-
+        # Calculate metrics and print
         prec5 = metrics.precision_at_n(data_df, query_num, 5)
         prec10 = metrics.precision_at_n(data_df, query_num, 10)
         prec50 = metrics.precision_at_n(data_df, query_num, 50)

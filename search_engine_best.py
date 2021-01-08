@@ -51,6 +51,8 @@ class SearchEngine:
             number_of_documents += 1
             # index the document data
             self._indexer.add_new_doc(parsed_document)
+
+        # Cut the dictionaries by num of instances
         max_val = max(self._indexer.inverted_idx.values())/2.5
         min_val = min(self._indexer.inverted_idx.values())
         cutted_inx = {key: value for key, value in self._indexer.inverted_idx.items() if max_val > value > min_val}
@@ -125,7 +127,13 @@ class SearchEngine:
     def get_parser(self):
         return self._parser
 
+
     def check_engine_quality(self, query_num, list_of_docs):
+        """
+        :param query_num:
+        :param list_of_docs:
+        :return: no return. prints metrics of the query. precision, recall, map.
+        """
 
         benchmark_path = "data\\benchmark_lbls_train.csv"
         df = pd.read_csv(benchmark_path)
@@ -137,6 +145,7 @@ class SearchEngine:
         rmv_lst = []
 
         ranking = []
+        # Add to list for raking
         for doc in list_of_docs:
             try:
                 ranking.append(dict_for_data[int(doc)])
@@ -153,7 +162,7 @@ class SearchEngine:
         # print("total Relevant doc found with tag 1 :" , len (data_df[data_df['y_true'] == 1.0]))
         # print("total NON relevant doc found with tag 0 :" , len (data_df[data_df['y_true'] == 0]))
         # print("found total of", len(df_prec), "tagged docs")
-
+        # Calculate metrics
         prec5 = metrics.precision_at_n(data_df, query_num, 5)
         prec10 = metrics.precision_at_n(data_df, query_num, 10)
         prec50 = metrics.precision_at_n(data_df, query_num, 50)
@@ -166,7 +175,7 @@ class SearchEngine:
         self.prec50_list.append(prec50)
         self.prec_total_list.append(prec_total)
         self.recall_list.append(recall_val)
-
+        # Print metrics
         print()
         print("precision at 5 of query", query_num, "is :", prec5)
         print("precision at 10 of query", query_num, "is :", prec10)
