@@ -1,7 +1,7 @@
 # spelling
-from autocorrect import Speller
+#from autocorrect import Speller
+from spellchecker import SpellChecker
 from ranker import Ranker
-
 
 # DO NOT MODIFY CLASS NAME
 class Searcher:
@@ -90,12 +90,14 @@ class Searcher:
     def do_spelling(query):
         nowSpelled = []
         toDeleteFromQuery = []
-        spell = Speller(lang='en')
+
+        spell = SpellChecker()
+
 
         # check spelling of each word
         for word in query:
 
-            afterSpelling = spell(word)
+            afterSpelling = spell.correction(word)
 
             # if it was a wrong spelling
             if afterSpelling != word:
