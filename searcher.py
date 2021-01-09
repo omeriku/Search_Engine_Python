@@ -2,7 +2,6 @@ from ranker import Ranker
 from nltk.corpus import wordnet
 import utils
 from indexer import Indexer
-import searcher_Spelling
 import searcher_Wordnet
 import searcher_Thesaurus
 
@@ -39,22 +38,21 @@ class Searcher:
         q_wordnet = searcher_Wordnet.Searcher.do_wordnet(query_as_list)
         q_thesaurus = searcher_Thesaurus.Searcher.do_thesaurus(query_as_list)
 
-        q_new_spelling, wrongWords = searcher_Spelling.Searcher.do_spelling(query_as_list)
-        # query_as_list = searcher_Spelling.Searcher.deleteWrongSpelledWords(query_as_list,wrongWords)
+        # q_new_spelling, wrongWords = searcher_Spelling.Searcher.do_spelling(query_as_list)
 
 
         # Upper lower case
         searcher_Wordnet.Searcher.upper_lower_case(query_as_list, self._indexer)
         searcher_Wordnet.Searcher.upper_lower_case(q_wordnet, self._indexer)
         searcher_Wordnet.Searcher.upper_lower_case(q_thesaurus, self._indexer)
-        searcher_Wordnet.Searcher.upper_lower_case(wrongWords, self._indexer)
-        searcher_Wordnet.Searcher.upper_lower_case(q_new_spelling, self._indexer)
+        # searcher_Wordnet.Searcher.upper_lower_case(wrongWords, self._indexer)
+        # searcher_Wordnet.Searcher.upper_lower_case(q_new_spelling, self._indexer)
 
         # print("query as list: ", query_as_list)
         # print("wordnet :", q_wordnet)
 
-        complete_query = query_as_list + q_new_spelling
-        added_words = q_wordnet + q_thesaurus + wrongWords
+        complete_query = query_as_list
+        added_words = q_wordnet + q_thesaurus
 
         relevant_docs = self._relevant_docs_from_posting(complete_query + added_words)
         n_relevant = len(relevant_docs)
